@@ -14,7 +14,7 @@ model = joblib.load('model/heart_attack_model.pkl')
 # Load environment variables from .env or st.secrets
 load_dotenv()
 try:
-    DATABASE_URL = os.getenv("SUPABASE_DB_URL") or st.secrets["SUPABASE_DB_URL"]
+    DATABASE_URL = st.secrets["SUPABASE_DB_URL"]
 except:
     st.error("Variable SUPABASE_DB_URL manquante")
     st.stop()
