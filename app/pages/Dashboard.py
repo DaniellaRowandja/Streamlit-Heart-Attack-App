@@ -8,7 +8,7 @@ import os
 
 # === CONFIGURATION ===
 load_dotenv()
-DATABASE_URL = os.getenv("SUPABASE_DB_URL") or st.secrets["SUPABASE_DB_URL"]
+DATABASE_URL = st.secrets["SUPABASE_DB_URL"]
 
 # Connexion to Database
 def load_user_data():
