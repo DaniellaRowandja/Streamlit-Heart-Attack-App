@@ -108,6 +108,6 @@ if st.button("Prédire"):
 
     # Insert into table 
     records = input_data.to_dict(orient="records")
-    add_data(records=records)
+    add_data(records=input_data)
     
     st.success("Données enregistrées avec succès dans la base.")
