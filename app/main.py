@@ -110,37 +110,4 @@ if st.button("Prédire"):
     records = input_data.to_dict(orient="records")
     add_data(records=records)
     
-    
     st.success("Données enregistrées avec succès dans la base.")
-
-"""
-    try:
-        insert_query =
-            INSERT INTO user_inputs (
-                patient_id, age, sex, cholesterol, blood_pressure, heart_rate, diabetes,
-                family_history, smoking, obesity, alcohol_consumption, exercise_hours_per_week,
-                diet, previous_heart_problems, medication_use, stress_level,
-                sedentary_hours_per_day, income, bmi, triglycerides,
-                physical_activity_days_per_week, sleep_hours_per_day, country,
-                continent, hemisphere, predicted_heart_attack_risk, created_at
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        
-        data = (
-            str(uuid.uuid4()), age, sex, cholesterol, blood_pressure, heart_rate, diabetes,
-            family_history, smoking, obesity, alcohol_consumption, exercise_hours_per_week,
-            diet, previous_heart_problems, medication_use, stress_level,
-            sedentary_hours_per_day, income, bmi, triglycerides,
-            physical_activity_days_per_week, sleep_hours_per_day, country,
-            continent, hemisphere, int(prediction), datetime.now()
-        )
-        cur.execute(insert_query, data)
-        conn.commit()
-        st.success("Données enregistrées avec succès dans la base.")
-
-    except Exception as e:
-        st.error(f"Erreur lors de l'enregistrement dans la base : {e}")
-
-# Close connection with database
-cur.close()
-conn.close()
-"""
