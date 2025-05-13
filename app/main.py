@@ -104,8 +104,7 @@ if st.button("Prédire"):
     input_data.columns = input_data.columns.str.strip().str.lower().str.replace(" ", "_")
     input_data["patient_id"]=str(uuid.uuid4())
     input_data["predicted_heart_attack_risk"]=int(prediction)
-    input_data["created_at"]=datetime.now()
-    input_data["created_at"] = input_data["created_at"].isoformat()
+    input_data["created_at"]=str(datetime.now())
 
     # Insert into table 
     records = input_data.to_dict(orient="records")
