@@ -105,9 +105,10 @@ if st.button("Prédire"):
     input_data["patient_id"]=str(uuid.uuid4())
     input_data["predicted_heart_attack_risk"]=int(prediction)
     input_data["created_at"]=datetime.now()
+    input_data["created_at"] = input_data["created_at"].isoformat()
 
     # Insert into table 
     records = input_data.to_dict(orient="records")
-    add_data(records=input_data)
+    add_data(records=records)
     
     st.success("Données enregistrées avec succès dans la base.")
