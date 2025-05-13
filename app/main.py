@@ -12,23 +12,18 @@ from supabase import create_client, Client
 # Load model 
 model = joblib.load('model/heart_attack_model.pkl')
 
-# Connect to the database
-<<<<<<< HEAD
-url = st.secrets("url")
-key = st.secrets("key")
+# Connexion to Database
+def add_data(records):
+    # Connect to the database
+    try:
+        url = st.secrets["url"]
+        key = st.secrets["key"]
 
-supabase: Client = create_client(url, 
-=======
-try:
-    url = st.secrets["url"]
-    key = st.secrets["key"]
+        supabase: Client = create_client(url, key)
+        supabase.table("user_inputs").insert(records).execute()
 
-    supabase: Client = create_client(url, key)
-except Exception as e:
-    st.error(f"Erreur de connexion à la base de données : {e}")
-    st.stop()
->>>>>>> fa5f991 (MAJ)
-
+    except Exception as e:
+        st.warning(f"Erreur : {e}")
 
 # ==== STREAMLIT APP ====
 st.title("Heart Attack Risk Prediction")
@@ -106,11 +101,19 @@ if st.button("Prédire"):
     st.write(f"Confiance dans la prédiction de risque élevé : {proba[0][1] * 100:.2f}%")
 
     # Insert into PgSQL database
-    response = supabase.table("user_inputs").insert(input_data).execute()
-    print(response.data)
+    input_data.columns = input_data.columns.str.strip().str.lower().str.replace(" ", "_")
+    input_data["patient_id"]=str(uuid.uuid4())
+    input_data["predicted_heart_attack_risk"]=int(prediction)
+    input_data["created_at"]=datetime.now()
 
-    """
+    # Insert into table 
+    records = input_data.to_dict(orient="records")
+    add_data(records=records)
+    
+    
+    st.success("Données enregistrées avec succès dans la base.")
 
+"""
     try:
         insert_query =
             INSERT INTO user_inputs (
@@ -130,29 +133,14 @@ if st.button("Prédire"):
             physical_activity_days_per_week, sleep_hours_per_day, country,
             continent, hemisphere, int(prediction), datetime.now()
         )
-<<<<<<< HEAD
         cur.execute(insert_query, data)
         conn.commit()
-        """
-=======
-
-        input_data.columns = input_data.columns.str.lower().str.replace(" ", "_")
-        input_data["patient_id"] = str(uuid.uuid4())
-        input_data["predicted_heart_attack_risk"] = int(prediction)
-        input_data["created_at"] = datetime.now()
-        
-        records = input_data.to_dict(orient="records")
-        response = supabase.table("user_inputs").insert(records).execute()
-
->>>>>>> fa5f991 (MAJ)
         st.success("Données enregistrées avec succès dans la base.")
 
     except Exception as e:
         st.error(f"Erreur lors de l'enregistrement dans la base : {e}")
-<<<<<<< HEAD
 
 # Close connection with database
-#cur.close()
-#conn.close()
-=======
->>>>>>> fa5f991 (MAJ)
+cur.close()
+conn.close()
+"""

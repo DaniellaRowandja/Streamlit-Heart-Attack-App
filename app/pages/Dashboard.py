@@ -8,11 +8,6 @@ import os
 from supabase import create_client, Client
 
 # === CONFIGURATION ===
-<<<<<<< HEAD
-load_dotenv()
-DATABASE_URL = st.secrets["SUPABASE_DB_URL"]
-=======
->>>>>>> fa5f991 (MAJ)
 
 # Connexion to Database
 def load_user_data():
