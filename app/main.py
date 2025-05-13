@@ -7,25 +7,16 @@ import os
 import uuid
 from datetime import datetime
 import pandas as pd
+from supabase import create_client, Client
 
 # Load model 
 model = joblib.load('model/heart_attack_model.pkl')
 
-# Load environment variables from .env or st.secrets
-load_dotenv()
-try:
-    DATABASE_URL = st.secrets["SUPABASE_DB_URL"]
-except:
-    st.error("Variable SUPABASE_DB_URL manquante")
-    st.stop()
-
 # Connect to the database
-try:
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-except Exception as e:
-    st.error(f"Erreur de connexion à la base de données : {e}")
-    st.stop()
+url = st.secrets("url")
+key = st.secrets("key")
+
+supabase: Client = create_client(url, 
 
 # ==== STREAMLIT APP ====
 st.title("Heart Attack Risk Prediction")
@@ -103,8 +94,13 @@ if st.button("Prédire"):
     st.write(f"Confiance dans la prédiction de risque élevé : {proba[0][1] * 100:.2f}%")
 
     # Insert into PgSQL database
+    response = supabase.table("user_inputs").insert(input_data).execute()
+    print(response.data)
+
+    """
+
     try:
-        insert_query = """
+        insert_query =
             INSERT INTO user_inputs (
                 patient_id, age, sex, cholesterol, blood_pressure, heart_rate, diabetes,
                 family_history, smoking, obesity, alcohol_consumption, exercise_hours_per_week,
@@ -113,7 +109,7 @@ if st.button("Prédire"):
                 physical_activity_days_per_week, sleep_hours_per_day, country,
                 continent, hemisphere, predicted_heart_attack_risk, created_at
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
+        
         data = (
             str(uuid.uuid4()), age, sex, cholesterol, blood_pressure, heart_rate, diabetes,
             family_history, smoking, obesity, alcohol_consumption, exercise_hours_per_week,
@@ -124,11 +120,12 @@ if st.button("Prédire"):
         )
         cur.execute(insert_query, data)
         conn.commit()
+        """
         st.success("Données enregistrées avec succès dans la base.")
 
     except Exception as e:
         st.error(f"Erreur lors de l'enregistrement dans la base : {e}")
 
 # Close connection with database
-cur.close()
-conn.close()
+#cur.close()
+#conn.close()
