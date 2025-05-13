@@ -5,19 +5,27 @@ import seaborn as sns
 import psycopg2
 from dotenv import load_dotenv
 import os
+from supabase import create_client, Client
 
 # === CONFIGURATION ===
+<<<<<<< HEAD
 load_dotenv()
 DATABASE_URL = st.secrets["SUPABASE_DB_URL"]
+=======
+>>>>>>> fa5f991 (MAJ)
 
 # Connexion to Database
 def load_user_data():
+    # Connect to the database
     try:
-        conn = psycopg2.connect(DATABASE_URL)
-        query = "SELECT * FROM user_inputs"
-        df = pd.read_sql_query(query, conn)
-        conn.close()
+        url = st.secrets["url"]
+        key = st.secrets["key"]
+
+        supabase: Client = create_client(url, key)
+        data = supabase.table("user_inputs").select("*").execute()
+        df =  pd.DataFrame(data.data)
         return df
+
     except Exception as e:
         st.warning(f"Erreur de connexion : {e}")
         return pd.DataFrame()
